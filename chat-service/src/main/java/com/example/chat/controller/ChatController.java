@@ -18,8 +18,8 @@ public class ChatController {
     private final ChatService chatService;
     private final ChatMapper chatMapper;
 
-    @PostMapping("/messages")
-    public ResponseEntity<MessageDto> sendMessage(SendMessageRequest request) {
+    @PostMapping("/")
+    public ResponseEntity<MessageDto> sendMessage(@RequestBody SendMessageRequest request) {
         Message message = chatService.sendMessage(new Message(request.message()));
         return ResponseEntity.ok(new MessageDto(message.getMessageText()));
     }
@@ -31,7 +31,7 @@ public class ChatController {
     }
 
     @GetMapping("/conversations/{userId}")
-    public ResponseEntity<ConversationDto> getConversationWithUser(String userId) {
+    public ResponseEntity<ConversationDto> getConversationWithUser(@PathVariable String userId) {
         List<Message> messages = chatService.getConversationWithUser(userId);
         return ResponseEntity.ok(new ConversationDto(chatMapper.mapToMessageListDto(messages)));
     }

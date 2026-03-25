@@ -12,7 +12,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     List<User> findAll();
 
-    List<User> findByUsernameContainingIgnoreCase(String query);
+    List<User> findByUserNameContainingIgnoreCase(String query);
 
     Optional<User> findByUserName(String userName);
 }

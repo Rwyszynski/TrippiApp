@@ -7,10 +7,8 @@ import com.example.user.mapper.UserMapper;
 import com.example.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,13 +26,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(Long id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResponseUsersDto> searchUsers(String query) {
+    public ResponseEntity<ResponseUsersDto> searchUsers(@RequestParam String query) {
         List<User> user = userService.searchUsers(query);
         return ResponseEntity.ok(new ResponseUsersDto(userMapper.toResponseUsersDto(user)));
     }

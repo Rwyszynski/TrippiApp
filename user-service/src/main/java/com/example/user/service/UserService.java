@@ -22,7 +22,7 @@ public class UserService {
     }
 
     public List<User> searchUsers(String query) {
-        List<User> users = userRepository.findByUsernameContainingIgnoreCase(query);
+        List<User> users = userRepository.findByUserNameContainingIgnoreCase(query);
         return users.isEmpty() ? List.of() : users;
     }
 

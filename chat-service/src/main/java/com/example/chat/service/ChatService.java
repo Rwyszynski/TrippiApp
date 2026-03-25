@@ -34,7 +34,8 @@ public class ChatService {
     }
 
     public List<Message> getConversationWithUser(String userId) {
-        List<Message> messages = chatRepository.findByUserId(userId);
+        List<Message> messages = chatRepository.findBySenderIdAndReceiverId(userId, userId);
+        //Sprawdz kim jestem ja
         return messages;
     }
 

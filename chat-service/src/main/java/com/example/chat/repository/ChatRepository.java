@@ -14,5 +14,5 @@ public interface ChatRepository extends CrudRepository<Message, Long> {
 
     Optional<Message> findById(Long id);
 
-    List<Message> findByUserId(String userId);
+    List<Message> findBySenderIdAndReceiverId(String senderId, String receiverId);
 }
