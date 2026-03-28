@@ -7,7 +7,6 @@ import com.example.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,9 +18,9 @@ public class ChatController {
     private final ChatMapper chatMapper;
 
     @PostMapping("/")
-    public ResponseEntity<MessageDto> sendMessage(@RequestBody SendMessageRequest request) {
-        Message message = chatService.sendMessage(new Message(request.message()));
-        return ResponseEntity.ok(new MessageDto(message.getMessageText()));
+    public ResponseEntity<SendMessageRequest> sendMessage(@RequestBody MessageDto request) {
+        Message message = chatService.sendMessage(new Message(request.messageText()));
+        return ResponseEntity.ok(new SendMessageRequest("Message" + message.getMessageText() +" has been sent"));
     }
 
     @GetMapping("/conversations")
@@ -30,21 +29,21 @@ public class ChatController {
         return ResponseEntity.ok(new ConversationDto(chatMapper.mapToMessageListDto(messages)));
     }
 
-    @GetMapping("/conversations/{userId}")
-    public ResponseEntity<ConversationDto> getConversationWithUser(@PathVariable String userId) {
-        List<Message> messages = chatService.getConversationWithUser(userId);
+    @GetMapping("/conversations/{userId}/{userId2}")
+    public ResponseEntity<ConversationDto> getConversationWithUser(@PathVariable Long userId, Long userId2) {
+        List<Message> messages = chatService.getConversationWithUser(userId, userId2);
         return ResponseEntity.ok(new ConversationDto(chatMapper.mapToMessageListDto(messages)));
     }
 
-    @PutMapping("/messages/{id}/read")
-    public ResponseEntity<ResponseReadDto> markMessageAsRead(Long id) {
-        List<Message> messages = chatService.markMessageAsRead(id);
-        return ResponseEntity.ok(new ResponseReadDto("Message marked as read"));
+    @PutMapping("/conversations/{userId}/read")
+    public ResponseEntity<?> markConversationAsRead(@PathVariable Long userId) {
+        chatService.markConversationAsRead(1L, userId); // później JWT
+        return ResponseEntity.ok("Conversation marked as read");
     }
 
-    @DeleteMapping("/messages/{id}")
-    public ResponseEntity<ResponseDeleteDto> deleteMessage(String id) {
-        Message message = chatService.deleteMessage(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDeleteDto> deleteMessage(@PathVariable Long id) {
+        chatService.deleteMessage(id);
         return ResponseEntity.ok(new ResponseDeleteDto("Message deleted"));
     }
 }
