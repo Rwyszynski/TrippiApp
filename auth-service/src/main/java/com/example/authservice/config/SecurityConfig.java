@@ -36,11 +36,15 @@ public class SecurityConfig {
         http.formLogin(c -> c.disable());
         http.httpBasic(c -> c.disable());
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); //bezstanowość
+
         http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/v1/auth/token/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
+                        /*
                         .requestMatchers("/v1/auth/register").permitAll()
+                        */
                 .anyRequest().authenticated());
         return http.build();
     }

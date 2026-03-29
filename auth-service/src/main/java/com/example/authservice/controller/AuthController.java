@@ -29,18 +29,10 @@ public class AuthController {
                 .password(password)
                 .build();
         userDetailsManager.createUser(user);
-        return ResponseEntity.ok(new RegisterUserResponseDto("Created user"));
+        return ResponseEntity.ok(new RegisterUserResponseDto("Created user: " + email));
     }
 
-/*
-    @PostMapping("/login")
-    public ResponseEntity<LoginUserResponseDto> login(@RequestBody LoginUserDto request) {
 
-        Long userId = 1L;
-        String token = jwtService.generateToken(userId);
-        return ResponseEntity.ok(new LoginUserResponseDto(token));
-    }
-*/
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponseDto> refreshToken(@RequestBody RefreshTokenRequestDto request) {
         //validate refresh token and generate new JWT token
