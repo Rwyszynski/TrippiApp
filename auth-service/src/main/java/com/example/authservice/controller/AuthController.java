@@ -1,28 +1,46 @@
 package com.example.authservice.controller;
 
 import com.example.authservice.entity.dto.*;
+import com.example.authservice.security.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RequestMapping("/v1/auth")
 @RestController
 public class AuthController {
 
+    private final JwtService jwtService;
+    private final UserDetailsManager userDetailsManager;
+
     @PostMapping("/register")
     public ResponseEntity<RegisterUserResponseDto> registerUser(@RequestBody RegisterUserDto request) {
-        //save
-        return ResponseEntity.ok(new RegisterUserResponseDto("User registered successfully"));
+        String email = request.email();
+        String password = request.password();
+        UserDetails user = User.builder()
+                .username(email)
+                .password(password)
+                .build();
+        userDetailsManager.createUser(user);
+        return ResponseEntity.ok(new RegisterUserResponseDto("Created user"));
     }
 
+/*
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponseDto> login(@RequestBody LoginUserDto request) {
-        //authenticate and generate JWT token
-        return ResponseEntity.ok(new LoginUserResponseDto("dummy-jwt-token"));
-    }
 
+        Long userId = 1L;
+        String token = jwtService.generateToken(userId);
+        return ResponseEntity.ok(new LoginUserResponseDto(token));
+    }
+*/
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponseDto> refreshToken(@RequestBody RefreshTokenRequestDto request) {
         //validate refresh token and generate new JWT token
