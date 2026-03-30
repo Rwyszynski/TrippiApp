@@ -1,6 +1,7 @@
 package com.example.authservice.controller.jwt;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.example.authservice.config.JwtConfigurationProperties;
 import com.example.authservice.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,6 @@ public class JwtTokenGenerator {
                 .withExpiresAt(addedTime)
                 .withIssuer(properties.issuer())
                 .withClaim("roles", securityUser.getAuthoritesAsString())
-                .sign(null);
+                .sign(Algorithm.HMAC256(properties.secret()));
     }
 }
