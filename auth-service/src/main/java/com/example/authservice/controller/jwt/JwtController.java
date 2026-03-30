@@ -1,6 +1,5 @@
 package com.example.authservice.controller.jwt;
 
-import com.example.authservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JwtController {
 
-    private final JwtService jwtService;
-    private final UserDetailsManager userDetailsManager;
     private final JwtTokenGenerator jwtTokenGenerator;
 
     @PostMapping("/token")
@@ -27,13 +24,4 @@ public class JwtController {
         );
     }
 
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<LoginUserResponseDto> login(@RequestBody LoginUserDto request) {
-
-        Long userId = 1L;
-        String token = jwtService.generateToken(userId);
-        return ResponseEntity.ok(new LoginUserResponseDto(token));
-    }
-*/
 }

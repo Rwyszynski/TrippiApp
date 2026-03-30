@@ -1,7 +1,6 @@
 package com.example.authservice.controller;
 
 import com.example.authservice.entity.dto.*;
-import com.example.authservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    private final JwtService jwtService;
     private final UserDetailsManager userDetailsManager;
 
     @PostMapping("/register")
