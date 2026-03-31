@@ -1,5 +1,6 @@
 package com.example.authservice.config;
 
+import com.example.authservice.controller.jwt.JwtAuthTokenFilter;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.List;
@@ -38,13 +40,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthTokenFilter jwtAuthTokenFilter) throws Exception {
         http.csrf(c -> c.disable());
         http.cors(corsConfigurerCustomizer());
         http.formLogin(c -> c.disable());
         http.httpBasic(c -> c.disable());
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); //bezstanowość
-
+        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class); //dodano filtr
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
