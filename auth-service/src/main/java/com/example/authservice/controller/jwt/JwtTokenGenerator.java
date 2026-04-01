@@ -35,6 +35,7 @@ public class JwtTokenGenerator {
                 .withIssuedAt(now)
                 .withExpiresAt(addedTime)
                 .withIssuer(properties.issuer())
+                .withKeyId("key-1")
                 .withClaim("roles", securityUser.getAuthoritesAsString())
                 .sign(algorithm);
     }
