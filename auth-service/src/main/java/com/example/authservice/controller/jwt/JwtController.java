@@ -27,6 +27,7 @@ public class JwtController {
                 .build()
         );
     }
+
     @GetMapping("/.well-known/jwks.json")
     public Map<String, Object> getJwks() {
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
