@@ -13,7 +13,7 @@ import java.util.List;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    private final UserClient userClient;
+    private final UserService userService;
 
     public Message sendMessage(Message message) {
 
@@ -22,8 +22,8 @@ public class ChatService {
         message.setTimestamp(LocalDateTime.now());
         message.setIsRead(false);
 
-        userClient.getUserById(message.getSenderId());
-        userClient.getUserById(message.getReceiverId());
+        userService.getUser(message.getSenderId());
+        userService.getUser(message.getReceiverId());
 
         return chatRepository.save(message);
     }
