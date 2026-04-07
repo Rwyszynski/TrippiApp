@@ -6,6 +6,8 @@ import com.example.chat.mapper.ChatMapper;
 import com.example.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,9 +20,11 @@ public class ChatController {
     private final ChatMapper chatMapper;
 
     @PostMapping("/")
-    public ResponseEntity<SendMessageRequest> sendMessage(@RequestBody MessageDto request) {
-        Message message = chatService.sendMessage(new Message(request.messageText()));
-        return ResponseEntity.ok(new SendMessageRequest("Message" + message.getMessageText() +" has been sent"));
+    public ResponseEntity<SendMessageRequest> sendMessage(@RequestBody MessageDto request, @AuthenticationPrincipal Jwt jwt) {
+        Message message = chatService.sendMessage(jwt, new Message(request.messageText(), request.receiverId()));
+        return ResponseEntity.ok(
+                new SendMessageRequest("Message " + message.getMessageText() + " has been sent")
+        );
     }
 
     @GetMapping("/conversations")

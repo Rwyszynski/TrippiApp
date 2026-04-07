@@ -25,8 +25,9 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsManager userDetailsService(UserRepository userRepository){
-        return new UserDetailsServiceImpl(userRepository, passwordEncoder());
+    public UserDetailsManager userDetailsService(UserRepository userRepository,
+                                                 UserClient userClient) {
+        return new UserDetailsServiceImpl(userRepository, passwordEncoder(), userClient);
     }
 
     @Bean

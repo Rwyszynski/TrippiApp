@@ -4,6 +4,8 @@ import com.example.chat.entity.Message;
 import com.example.chat.repository.ChatRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +17,12 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final UserService userService;
 
-    public Message sendMessage(Message message) {
+    public Message sendMessage(Jwt jwt, Message message) {
 
-        message.setSenderId(1L);
-        message.setReceiverId(2L);
+        Long senderId = Long.valueOf(jwt.getSubject());
+        String username = jwt.getClaim("preferred_username");
+
+        message.setSenderId(senderId);
         message.setTimestamp(LocalDateTime.now());
         message.setIsRead(false);
 

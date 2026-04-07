@@ -31,12 +31,13 @@ public class JwtTokenGenerator {
         Instant addedTime = now.plus(Duration.ofMinutes(properties.expirationMinutes()));  //10 minut
         Algorithm algorithm = Algorithm.RSA256(null, (RSAPrivateKey) keyPair.getPrivate());
         return JWT.create()                 //tworzenie tokena
-                .withSubject(securityUser.getUsername())
+                .withSubject(String.valueOf(securityUser.getId()))
                 .withIssuedAt(now)
                 .withExpiresAt(addedTime)
                 .withIssuer(properties.issuer())
                 .withKeyId("key-1")
                 .withClaim("roles", securityUser.getAuthoritesAsString())
+                .withClaim("preferred_username", securityUser.getUsername())
                 .sign(algorithm);
     }
 }

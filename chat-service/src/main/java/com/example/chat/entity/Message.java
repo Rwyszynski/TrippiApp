@@ -15,6 +15,11 @@ public class Message {
         this.messageText = messageText;
     }
 
+    public Message(String messageText, Long receiverId) {
+        this.messageText = messageText;
+        this.receiverId = receiverId;
+    }
+
     public Message(String messageText, Long senderId, Long receiverId, LocalDateTime timestamp, boolean b) {
         this.messageText = messageText;
         this.senderId = senderId;

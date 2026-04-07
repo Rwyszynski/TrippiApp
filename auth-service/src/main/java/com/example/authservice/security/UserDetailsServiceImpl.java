@@ -1,7 +1,9 @@
 package com.example.authservice.security;
 
+import com.example.authservice.config.UserClient;
 import com.example.authservice.entity.AuthUser;
 import com.example.authservice.entity.Role;
+import com.example.authservice.entity.dto.CreateUserRequest;
 import com.example.authservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsManager {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserClient userClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,13 +35,26 @@ public class UserDetailsServiceImpl implements UserDetailsManager {
             log.warn("User already exists");
             throw new UsernameNotFoundException("Not saved - Username already exists");
         }
+
         AuthUser createdUser = new AuthUser(
-               user.getUsername(),
-               passwordEncoder.encode(user.getPassword()),
+                user.getUsername(),
+                passwordEncoder.encode(user.getPassword()),
                 LocalDateTime.now(),
                 Set.of(Role.STANDARD)
         );
-        AuthUser newUser =  userRepository.save(createdUser);
+
+        AuthUser newUser = userRepository.save(createdUser);
+
+        //Dodanie usera do drugiej bazy
+        try {
+            userClient.createUser(new CreateUserRequest(
+                    newUser.getId(),
+                    newUser.getEmail()
+            ));
+        } catch (Exception e) {
+            log.error("FAILED to create user in user-service", e);
+        }
+
         log.info("Created user: " + user.getUsername());
     }
 

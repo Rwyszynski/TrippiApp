@@ -1,9 +1,12 @@
 package com.example.user.service;
 
+import com.example.user.entity.dto.UserNameDto;
 import com.example.user.entity.User;
 import com.example.user.entity.dto.UserDto;
 import com.example.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ChatService chatService;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -31,5 +35,11 @@ public class UserService {
         user.setUserName(userDto.userName());
         user.setAvatarUrl(userDto.avatarUrl());
         return userRepository.save(user);
+    }
+
+    public UserNameDto getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return new UserNameDto(username);
     }
 }

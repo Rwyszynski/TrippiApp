@@ -30,15 +30,4 @@ public class AuthController {
         return ResponseEntity.ok(new RegisterUserResponseDto("Created user: " + email));
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponseDto> refreshToken(@RequestBody RefreshTokenRequestDto request) {
-        //validate refresh token and generate new JWT token
-        return ResponseEntity.ok(new RefreshTokenResponseDto("new-dummy-jwt-token"));
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<LogoutResponseDto> logout(@RequestBody LogoutRequestDto request) {
-        //invalidate refresh token
-        return ResponseEntity.ok(new LogoutResponseDto("User logged out successfully"));
-    }
 }

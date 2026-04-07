@@ -3,12 +3,12 @@ package com.example.user.controller;
 import com.example.user.entity.User;
 import com.example.user.entity.dto.ResponseUsersDto;
 import com.example.user.entity.dto.UserDto;
+import com.example.user.entity.dto.UserNameDto;
 import com.example.user.mapper.UserMapper;
 import com.example.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,9 +38,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getCurrentUser() {
-        // Implementation to retrieve the current authenticated user
-        return ResponseEntity.ok(new UserDto("current_user", " "));
+    public ResponseEntity<UserNameDto> getCurrentUser() {
+        UserNameDto user = userService.getCurrentUser();
+        return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/profile")
@@ -48,5 +48,4 @@ public class UserController {
         User updatedUser = userService.updateUserProfile(userDto);
         return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
     }
-
 }
