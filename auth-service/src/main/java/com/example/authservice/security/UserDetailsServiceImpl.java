@@ -44,16 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsManager {
         );
 
         AuthUser newUser = userRepository.save(createdUser);
-
-        //Dodanie usera do drugiej bazy
-        try {
-            userClient.createUser(new CreateUserRequest(
-                    newUser.getId(),
-                    newUser.getEmail()
-            ));
-        } catch (Exception e) {
-            log.error("FAILED to create user in user-service", e);
-        }
+        userClient.createUser(new CreateUserRequest(newUser.getEmail()));
 
         log.info("Created user: " + user.getUsername());
     }

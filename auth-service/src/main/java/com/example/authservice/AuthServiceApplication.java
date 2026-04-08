@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableFeignClients(basePackages = "com.example.authservice")
+@EnableFeignClients
 @EnableConfigurationProperties(JwtConfigurationProperties.class)
 @SpringBootApplication
 public class AuthServiceApplication {

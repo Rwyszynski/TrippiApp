@@ -14,7 +14,8 @@ public class FeignConfig {
         return requestTemplate -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (authentication != null && authentication.getCredentials() instanceof String token) {
+            if (authentication instanceof org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken jwtAuth) {
+                String token = jwtAuth.getToken().getTokenValue();
                 requestTemplate.header("Authorization", "Bearer " + token);
             }
         };

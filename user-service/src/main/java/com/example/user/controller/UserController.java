@@ -1,11 +1,13 @@
 package com.example.user.controller;
 
 import com.example.user.entity.User;
+import com.example.user.entity.dto.CreateUserRequest;
 import com.example.user.entity.dto.ResponseUsersDto;
 import com.example.user.entity.dto.UserDto;
 import com.example.user.entity.dto.UserNameDto;
 import com.example.user.mapper.UserMapper;
 import com.example.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +49,11 @@ public class UserController {
     public ResponseEntity<UserDto> updateUserProfile(UserDto userDto) {
         User updatedUser = userService.updateUserProfile(userDto);
         return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserRequest request) {
+        userService.createUser(request);
+        return ResponseEntity.ok().build();
     }
 }

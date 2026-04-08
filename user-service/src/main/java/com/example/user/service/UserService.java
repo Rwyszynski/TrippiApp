@@ -1,5 +1,6 @@
 package com.example.user.service;
 
+import com.example.user.entity.dto.CreateUserRequest;
 import com.example.user.entity.dto.UserNameDto;
 import com.example.user.entity.User;
 import com.example.user.entity.dto.UserDto;
@@ -41,5 +42,12 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return new UserNameDto(username);
+    }
+
+    public void createUser(CreateUserRequest request) {
+        User user = new User();
+        user.setUserName(request.email());
+
+        userRepository.save(user);
     }
 }
