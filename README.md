@@ -1,19 +1,178 @@
-public class AuthController {
+# 📦 Microservices System – Chat Application
 
-    POST /auth/register
-    POST /auth/login
-    GET /users
-    GET /users/{id}
-    GET /users/search
-    GET /users/me
-    PATCH /users/profile
+## 📖 Project Overview
+This project is a chat application built using a **microservices architecture**. Each service is responsible for a specific domain (e.g., authentication, users, messaging), and communication between services is handled via REST APIs and Feign Client.
+
+---
+
+## 🛠️ Technologies
+
+- Java 17+
+- Spring Boot
+- Spring Security + JWT
+- Spring Cloud OpenFeign
+- Maven
+- PostgreSQL
+- Docker (optional)
+
+---
+
+## 🚀 How to Run the Project
+
+### 1. Clone the repository
+```
+git clone <repo-url>
+cd <project-folder>
+```
+
+### 2. Configure the database
+In `application.yml` or `application.properties`:
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/db_name
+spring.datasource.username=postgres
+spring.datasource.password=your_password
+```
+
+### 3. Run services
+Each microservice runs independently:
+```
+cd auth-service
+mvn spring-boot:run
+
+cd user-service
+mvn spring-boot:run
+
+cd chat-service
+mvn spring-boot:run
+```
+
+Or run them via your IDE (e.g., IntelliJ) by starting the `Application` class.
+
+---
+
+## 🔐 Authentication (JWT)
+
+1. Get token:
+```
+POST /auth/login
+```
+Request body:
+```
+{
+  "username": "user",
+  "password": "password"
 }
+```
 
-public class ChatController {
+2. Use token in header:
+```
+Authorization: Bearer <token>
+```
 
-    POST /messages
-    GET /conversations
-    GET /conversations/{userId}
-    PUT /messages/{id}/read
-    DELETE /messages/{id}
+---
+
+## 🔗 API Endpoints
+
+### 📌 Auth Service
+- `POST /auth/register` – register user
+- `POST /auth/login` – login
+- `GET /.well-known/jwks.json` – public key for JWT verification
+
+### 👤 User Service
+- `GET /users/{id}` – get user by ID
+- `GET /users` – get all users
+
+### 💬 Chat Service
+- `GET /v1/messages/{id}` – get message
+- `POST /v1/messages` – send message
+
+---
+
+## 🔄 Inter-Service Communication
+
+Microservices communicate using **Feign Client**.
+
+Example:
+```java
+@FeignClient(name = "chat-service", url = "${services.chat-service.url}")
+public interface ChatClient {
+
+    @GetMapping("/v1/messages/{id}")
+    ChatResponseDto getChat(@PathVariable("id") Long id);
 }
+```
+
+### How it works:
+- One service (e.g., User Service) calls another (Chat Service)
+- Feign automatically performs the HTTP request
+- JWT token can be propagated using an interceptor
+
+---
+
+## 📁 Project Structure
+
+```
+project-root/
+│
+├── auth-service/
+│   ├── controller/
+│   ├── service/
+│   ├── security/
+│   └── repository/
+│
+├── user-service/
+│   ├── controller/
+│   ├── service/
+│   ├── client/        <-- Feign clients
+│   └── repository/
+│
+├── chat-service/
+│   ├── controller/
+│   ├── service/
+│   └── repository/
+│
+└── common/ (optional)
+    └── dto/
+```
+
+---
+
+## ⚙️ Feign + JWT Configuration
+
+To propagate JWT tokens between services:
+
+```java
+@Configuration
+public class FeignConfig {
+
+    @Bean
+    public RequestInterceptor requestInterceptor() {
+        return requestTemplate -> {
+            requestTemplate.header("Authorization", "Bearer " + getToken());
+        };
+    }
+}
+```
+
+---
+
+## 📌 Additional Notes
+
+- Each service can have its own database
+- API Gateway can be added
+- Service Discovery (e.g., Eureka) can be integrated
+
+---
+
+## ✅ Future Improvements
+
+- WebSocket for real-time chat
+- Docker Compose for full environment setup
+- Rate limiting
+- Monitoring (Prometheus + Grafana)
+
+---
+
+## 👨‍💻 Author
+This project was created for educational purposes.
+
