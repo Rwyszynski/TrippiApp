@@ -42,8 +42,9 @@ public class ChatService {
         return messages;
     }
 
-    public List<Message> getConversationWithUser(Long userId, Long currentUserId) {
-        return chatRepository.findConversation(currentUserId, userId);
+    public List<Message> getConversationWithUser(Long userId, Jwt jwt) {
+        Long senderId = Long.valueOf(jwt.getSubject());
+        return chatRepository.findConversation(userId, senderId);
     }
 
     public Message deleteMessage(Long id) {
@@ -53,8 +54,8 @@ public class ChatService {
     }
 
     @Transactional
-    public void markConversationAsRead(Long currentUserId, Long userId) {
-        chatRepository.markMessagesAsRead(currentUserId, userId);
+    public void markConversationAsRead(Long UserId, Jwt jwt) {
+        Long senderId = Long.valueOf(jwt.getSubject());
+        chatRepository.markMessagesAsRead(UserId, senderId);
     }
-
 }

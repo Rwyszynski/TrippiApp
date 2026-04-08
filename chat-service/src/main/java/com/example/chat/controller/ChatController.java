@@ -33,15 +33,15 @@ public class ChatController {
         return ResponseEntity.ok(new ConversationDto(chatMapper.mapToMessageListDto(messages)));
     }
 
-    @GetMapping("/conversations/{userId}/{userId2}")
-    public ResponseEntity<ConversationDto> getConversationWithUser(@PathVariable Long userId, Long userId2) {
-        List<Message> messages = chatService.getConversationWithUser(userId, userId2);
+    @GetMapping("/conversations/get/{userId}/")
+    public ResponseEntity<ConversationDto> getConversationWithUser(@PathVariable Long userId, @AuthenticationPrincipal Jwt jwt) {
+        List<Message> messages = chatService.getConversationWithUser(userId, jwt);
         return ResponseEntity.ok(new ConversationDto(chatMapper.mapToMessageListDto(messages)));
     }
 
-    @PutMapping("/conversations/{userId}/read")
-    public ResponseEntity<?> markConversationAsRead(@PathVariable Long userId) {
-        chatService.markConversationAsRead(1L, userId); // później JWT
+    @PutMapping("/conversations/read/{userId}")
+    public ResponseEntity<?> markConversationAsRead(@PathVariable Long userId, @AuthenticationPrincipal Jwt jwt) {
+        chatService.markConversationAsRead(userId, jwt);
         return ResponseEntity.ok("Conversation marked as read");
     }
 

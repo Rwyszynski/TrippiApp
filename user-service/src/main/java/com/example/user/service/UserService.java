@@ -45,9 +45,7 @@ public class UserService {
     }
 
     public void createUser(CreateUserRequest request) {
-        User user = new User();
-        user.setUserName(request.email());
-
+        User user = new User(request.email());
         userRepository.save(user);
     }
 }
