@@ -1,10 +1,10 @@
 package com.example.chat.service;
 
 import com.example.chat.entity.Message;
+import com.example.chat.kafka.KafkaProducerService;
 import com.example.chat.repository.ChatRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -16,11 +16,11 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final UserService userService;
+    private final KafkaProducerService kafkaProducerService;
 
     public Message sendMessage(Jwt jwt, Message message) {
 
         Long senderId = Long.valueOf(jwt.getSubject());
-        String username = jwt.getClaim("preferred_username");
 
         message.setSenderId(senderId);
         message.setTimestamp(LocalDateTime.now());
@@ -29,7 +29,14 @@ public class ChatService {
         userService.getUser(message.getSenderId());
         userService.getUser(message.getReceiverId());
 
-        return chatRepository.save(message);
+        Message saved = chatRepository.save(message);
+
+        // KAFKA
+        kafkaProducerService.sendMessage(
+                "Message sent: " + saved.getMessageText()
+        );
+
+        return saved;
     }
 
     public Message readMessages(Long id) {
