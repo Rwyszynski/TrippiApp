@@ -1,10 +1,8 @@
-POST http://localhost:8080/v1/messages/
-
-Authorization: Bearer eyJraWQiOiJrZXktMSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxIiwicm9sZXMiOlsiU1RBTkRBUkQiXSwiaXNzIjoiVHJpcHBpIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic3RyaW5nIiwiZXhwIjoxNzc2MTExMjM1LCJpYXQiOjE3NzYxMTA2MzV9.r8TKd_rccwW5JfCht5kHlXt4dJK8LiJY2T6aNSM_QVLAxtvKjAVvY7QByG8WzofxEwUFdlLelk4y0IcVhRONjkmAR3d1tceCqoJTB4Zc225WWF7MEKbpvcxSViORGSI6XbGTh2erJiu1OdYZExZ4Kxn8PJt3MVJWDbzr852I-HTmmjTuK-GwuS_BGXE5tY2eZSN_yD9bX7WifEn-Hi6Fsv06AVxXlvTwFxqABp5fb4G7C8zKjuo16W5bs0Mh60q6uZ6TjpjEO9lSYUBhn2liPkCjWb8fqHW_zZHqVoiK7pnuBqpeYundUYewiHzdgsOkh8wm8sYQjffoQOQlBHEncQ
+POST http://localhost:8080/v1/auth/register
 
 Content-Type: application/json
 
 {
-  "messageText": "hello kafka",
-  "receiverId": 1
+  "email": "string2",
+  "password": "string2"
 }

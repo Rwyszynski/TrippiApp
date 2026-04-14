@@ -2,7 +2,6 @@ package com.example.authservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,5 +35,4 @@ public class AuthUser {
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> role = new HashSet<>();
-
 }

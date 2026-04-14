@@ -18,8 +18,4 @@ public class ChatMapper {
                 .toList();
         return messageDtos;
     }
-
-
-
-
 }

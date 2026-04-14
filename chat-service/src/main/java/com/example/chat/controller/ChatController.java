@@ -50,4 +50,6 @@ public class ChatController {
         chatService.deleteMessage(id);
         return ResponseEntity.ok(new ResponseDeleteDto("Message deleted"));
     }
+
+
 }

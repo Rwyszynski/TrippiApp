@@ -1,7 +1,8 @@
 package com.example.chat.service;
 
 import com.example.chat.entity.Message;
-import com.example.chat.kafka.KafkaProducerService;
+import com.example.chat.kafka.MessageEvent;
+import com.example.chat.kafka.MessageProducer;
 import com.example.chat.repository.ChatRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final UserService userService;
-    private final KafkaProducerService kafkaProducerService;
+    private final MessageProducer messageProducer;
 
     public Message sendMessage(Jwt jwt, Message message) {
 
@@ -28,14 +29,16 @@ public class ChatService {
 
         userService.getUser(message.getSenderId());
         userService.getUser(message.getReceiverId());
-
         Message saved = chatRepository.save(message);
 
-        // KAFKA
-        kafkaProducerService.sendMessage(
-                "Message sent: " + saved.getMessageText()
+        // EVENT
+        MessageEvent event = new MessageEvent(
+                saved.getSenderId(),
+                saved.getReceiverId(),
+                saved.getMessageText(),
+                saved.getTimestamp()
         );
-
+        messageProducer.sendMessageEvent(event);
         return saved;
     }
 

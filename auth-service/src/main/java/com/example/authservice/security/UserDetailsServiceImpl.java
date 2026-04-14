@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -45,7 +44,6 @@ public class UserDetailsServiceImpl implements UserDetailsManager {
 
         AuthUser newUser = userRepository.save(createdUser);
         userClient.createUser(new CreateUserRequest(newUser.getEmail()));
-
         log.info("Created user: " + user.getUsername());
     }
 

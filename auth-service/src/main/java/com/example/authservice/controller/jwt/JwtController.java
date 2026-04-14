@@ -3,7 +3,6 @@ package com.example.authservice.controller.jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
@@ -47,5 +46,4 @@ public class JwtController {
                 )
         );
     }
-
 }

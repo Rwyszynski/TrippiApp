@@ -1,12 +1,14 @@
 package com.example.user;
 
-import com.example.user.config.TestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
-@Import(TestConfig.class)
-@SpringBootTest
+@EnableFeignClients
+@Profile("!test")
 class UserApplicationTests {
 
     @Test

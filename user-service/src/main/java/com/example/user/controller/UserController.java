@@ -7,7 +7,6 @@ import com.example.user.entity.dto.UserDto;
 import com.example.user.entity.dto.UserNameDto;
 import com.example.user.mapper.UserMapper;
 import com.example.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

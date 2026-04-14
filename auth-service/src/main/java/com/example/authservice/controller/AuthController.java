@@ -29,5 +29,4 @@ public class AuthController {
         userDetailsManager.createUser(user);
         return ResponseEntity.ok(new RegisterUserResponseDto("Created user: " + email));
     }
-
 }
