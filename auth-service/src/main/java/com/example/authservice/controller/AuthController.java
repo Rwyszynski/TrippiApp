@@ -24,7 +24,7 @@ public class AuthController {
         String password = request.password();
         UserDetails user = User.builder()
                 .username(email)
-                .password(password)
+                .password(password) //.password(passwordEncoder.encode(password))
                 .build();
         userDetailsManager.createUser(user);
         return ResponseEntity.ok(new RegisterUserResponseDto("Created user: " + email));

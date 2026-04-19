@@ -14,6 +14,7 @@ This project is a chat application built using a **microservices architecture**.
 - Maven
 - PostgreSQL
 - Docker (optional)
+- Kafka
 
 ---
 
@@ -74,17 +75,29 @@ Authorization: Bearer <token>
 ## 🔗 API Endpoints
 
 ### 📌 Auth Service
-- `POST /auth/register` – register user
-- `POST /auth/login` – login
-- `GET /.well-known/jwks.json` – public key for JWT verification
+- POST /v1/auth/register – register user
+- POST /v1/auth/token – generate JWT token
+- GET /v1/auth/.well-known/jwks.json – public key for JWT verification
 
 ### 👤 User Service
-- `GET /users/{id}` – get user by ID
-- `GET /users` – get all users
+- GET /v1/users/all – get all users
+- GET /v1/users/{id} – get user by ID
+- GET /v1/users/search?query= – search users
+- GET /v1/users/me – get current user
+- PATCH /v1/users/profile – update user profile
+- POST /v1/users – create user
 
 ### 💬 Chat Service
-- `GET /v1/messages/{id}` – get message
-- `POST /v1/messages` – send message
+- POST /v1/messages/ – send message
+- GET /v1/messages/conversations – get all conversations
+- GET /v1/messages/conversations/get/{userId}/ – get conversation with user
+- PUT /v1/messages/conversations/read/{userId} – mark as read
+- DELETE /v1/messages/{id} – delete message
+
+### 💬 Chat
+
+- SEND /app/chat – send message
+- SUBSCRIBE /topic/messages – receive messages (broadcast)
 
 ---
 
@@ -115,21 +128,29 @@ public interface ChatClient {
 project-root/
 │
 ├── auth-service/
+│   ├── config/
 │   ├── controller/
-│   ├── service/
+│   ├── entity/
 │   ├── security/
 │   └── repository/
 │
 ├── user-service/
+│   ├── config/
 │   ├── controller/
-│   ├── service/
-│   ├── client/        <-- Feign clients
-│   └── repository/
+│   ├── entity/    
+│   ├── repository/ 
+│   ├── service/      
+│   └── mapper/
 │
 ├── chat-service/
+│   ├── config/
 │   ├── controller/
-│   ├── service/
-│   └── repository/
+│   ├── entity/
+│   ├── kafka/     
+│   ├── repository/ 
+│   ├── service/   
+│   ├── websocket/     
+│   └── mapper/
 │
 └── common/ (optional)
     └── dto/
