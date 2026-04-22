@@ -23,6 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/debug").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/v1/users").permitAll()
                         .anyRequest().authenticated()
                 )

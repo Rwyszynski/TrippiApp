@@ -35,6 +35,12 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
             return;
         }
         //do usuniecia
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        //do usunięcia
         String authorization = request.getHeader("Authorization");
         if (authorization == null) {
             filterChain.doFilter(request, response);
