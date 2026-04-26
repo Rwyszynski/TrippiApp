@@ -74,8 +74,11 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres-user
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1robo1
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://auth-service:8080/v1/auth/.well-known/jwks.json
     depends_on:
       postgres:
+        condition: service_started
+      auth-service:
         condition: service_started
     networks:
       - microservices-net

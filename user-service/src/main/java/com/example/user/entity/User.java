@@ -23,4 +23,7 @@ public class User {
     private String userName;
 
     private String avatarUrl;
+    private String country;
+    private String gender;
+    private Integer age;
 }

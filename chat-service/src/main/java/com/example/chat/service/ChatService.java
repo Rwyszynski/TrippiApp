@@ -54,7 +54,7 @@ public class ChatService {
 
     public List<Message> getConversationWithUser(Long userId, Jwt jwt) {
         Long senderId = Long.valueOf(jwt.getSubject());
-        return chatRepository.findConversation(userId, senderId);
+        return chatRepository.findConversation(senderId, userId);
     }
 
     public Message deleteMessage(Long id) {

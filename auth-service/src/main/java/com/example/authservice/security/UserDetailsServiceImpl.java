@@ -64,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsManager {
 
     @Override
     public boolean userExists(String username) {
-        return false;
+        return userRepository.findFirstByEmail(username).isPresent();
     }
 
 }

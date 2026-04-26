@@ -1,3 +1,3 @@
 package com.example.user.entity.dto;
 
-public record UserResponseDto(String name, String avatarUrl){}
+public record UserResponseDto(Long id, String name, String avatarUrl){}

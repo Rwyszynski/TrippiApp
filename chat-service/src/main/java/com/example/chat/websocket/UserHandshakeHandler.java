@@ -17,7 +17,6 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
             WebSocketHandler wsHandler,
             Map<String, Object> attributes) {
 
-        //  query param ?userId=1
         String userId = ((ServletServerHttpRequest) request)
                 .getServletRequest()
                 .getParameter("userId");

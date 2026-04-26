@@ -9,6 +9,8 @@ import com.example.user.mapper.UserMapper;
 import com.example.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -45,8 +47,10 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
-    public ResponseEntity<UserDto> updateUserProfile(UserDto userDto) {
-        User updatedUser = userService.updateUserProfile(userDto);
+    public ResponseEntity<UserDto> updateUserProfile(
+            @RequestBody UserDto userDto,
+            @AuthenticationPrincipal Jwt jwt) {
+        User updatedUser = userService.updateUserProfile(userDto, jwt);
         return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
     }
 

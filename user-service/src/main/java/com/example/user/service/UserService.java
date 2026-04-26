@@ -4,10 +4,12 @@ import com.example.user.entity.dto.CreateUserRequest;
 import com.example.user.entity.dto.UserNameDto;
 import com.example.user.entity.User;
 import com.example.user.entity.dto.UserDto;
+import com.example.user.exception.UserAlreadyExistsException;
 import com.example.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -31,10 +33,14 @@ public class UserService {
         return users.isEmpty() ? List.of() : users;
     }
 
-    public User updateUserProfile(UserDto userDto) {
-        User user = userRepository.findByUserName(userDto.userName()).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setUserName(userDto.userName());
+    public User updateUserProfile(UserDto userDto, Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         user.setAvatarUrl(userDto.avatarUrl());
+        user.setCountry(userDto.country());
+        user.setGender(userDto.gender());
+        user.setAge(userDto.age());
         return userRepository.save(user);
     }
 
@@ -45,6 +51,9 @@ public class UserService {
     }
 
     public void createUser(CreateUserRequest request) {
+        if (userRepository.findByUserName(request.email()).isPresent()) {
+            throw new UserAlreadyExistsException("Użytkownik z tym emailem już istnieje.");
+        }
         User user = new User(request.email());
         userRepository.save(user);
     }

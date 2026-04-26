@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
@@ -27,26 +28,28 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //do usuniecia
-        String path = request.getServletPath();
-
-        if (path.startsWith("/ws")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        //do usuniecia
         String authorization = request.getHeader("Authorization");
-        if (authorization == null) {
+
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), null)).build();
-        String token = authorization.substring(7);
-        DecodedJWT decodedToken = jwtVerifier.verify(token);
-        String email = decodedToken.getSubject();
-        List<SimpleGrantedAuthority> roles = decodedToken.getClaim("roles").asList(String.class).stream().map(SimpleGrantedAuthority::new).toList();
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(email, null, roles);
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+        try {
+            JWTVerifier jwtVerifier = JWT.require(Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), null)).build();
+            String token = authorization.substring(7);
+            DecodedJWT decodedToken = jwtVerifier.verify(token);
+            String email = decodedToken.getSubject();
+            List<SimpleGrantedAuthority> roles = decodedToken.getClaim("roles").asList(String.class).stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(email, null, roles)
+            );
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
         filterChain.doFilter(request, response);
     }

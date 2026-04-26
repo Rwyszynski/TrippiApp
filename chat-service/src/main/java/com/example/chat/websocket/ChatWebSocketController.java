@@ -10,6 +10,6 @@ public class ChatWebSocketController {
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
     public String chat(String msg) {
-        return "echo: " + msg;
+        return msg;
     }
 }

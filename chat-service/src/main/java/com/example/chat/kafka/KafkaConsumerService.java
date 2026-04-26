@@ -18,7 +18,6 @@ public class KafkaConsumerService {
         try {
             MessageEvent event = objectMapper.readValue(message, MessageEvent.class);
 
-            // wysyłka do konkretnego usera
             messagingTemplate.convertAndSendToUser(
                     event.receiverId().toString(),
                     "/queue/messages",
