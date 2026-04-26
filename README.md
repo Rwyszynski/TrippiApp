@@ -184,16 +184,3 @@ public class FeignConfig {
 - Service Discovery (e.g., Eureka) can be integrated
 
 ---
-
-## ✅ Future Improvements
-
-- WebSocket for real-time chat
-- Docker Compose for full environment setup
-- Rate limiting
-- Monitoring (Prometheus + Grafana)
-
----
-
-## 👨‍💻 Author
-This project was created for educational purposes.
-
