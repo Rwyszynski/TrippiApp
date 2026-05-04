@@ -9,7 +9,7 @@ import java.util.List;
 public class ChatMapper {
 
     public MessageDto mapToMessageDto(Message message) {
-        return new MessageDto(message.getMessageText(), message.getReceiverId());
+        return new MessageDto(message.getMessageText(), message.getSenderId(), message.getReceiverId());
     }
 
      public List<MessageDto> mapToMessageListDto(List<Message> messages) {

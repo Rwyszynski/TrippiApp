@@ -49,6 +49,7 @@ public class SecurityConfig {
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); //bezstanowość
         http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class); //dodano filtr
         http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
